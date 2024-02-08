@@ -1,6 +1,7 @@
 import { NftTokenContract } from "@covalenthq/client-sdk"
 import { IconProps } from "@radix-ui/react-icons/dist/types"
 import { ForwardRefExoticComponent, RefAttributes } from "react"
+import { URL } from "url"
 
 export type GridValue = "grid-6" | "grid-4" | "no-dec" | "list" 
 
@@ -23,4 +24,11 @@ export interface IDetailCollection {
 export interface IListNft {
   loading: boolean
   listNft: NftTokenContract[]
+}
+
+export interface ISocialMediaShare {
+  icon: ({ className }: { className: string; }) => JSX.Element
+  color: string
+  iconColor: string
+  link: URL
 }

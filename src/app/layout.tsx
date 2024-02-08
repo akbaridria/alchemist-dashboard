@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Alchemist 4.0",
   description: "",
   icons: {
-    icon: '/alchemist-logo.webp'
+    icon: '/alchemist-logo.jpeg'
   }
 };
 

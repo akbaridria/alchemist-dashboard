@@ -2,9 +2,10 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { CovalentClient, Chains, NftTokenContract } from "@covalenthq/client-sdk";
 import data from '@/lib/data.json';
-import { IGridObject } from "@/types";
+import { IGridObject, ISocialMediaShare } from "@/types";
 import { ListBulletIcon, ViewGridIcon, TableIcon, DashboardIcon } from '@radix-ui/react-icons'
 import { useEffect, useState } from "react";
+import { TwitterIcon, FarcasterIcon, LensterIcon, TelegramIcon } from '@/components/ui/Icons';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -65,3 +66,42 @@ export const listGrids: IGridObject[] = [
 ]
 
 export const trimWallet = (s: string) => s.slice(0, 6) + '...' + s.slice(-5);
+
+const buildUrl = (url: string, text: string, textKey: string, urlKey: string, hostname: string) => {
+  const u = new URL(url);
+  u.searchParams.append(textKey, text);
+  u.searchParams.append(urlKey, hostname);
+  return u;
+}
+
+const textShare = "Unveiling the Alchemist 4.0 NFT collection! Discover unique artwork & join the community."
+
+export const listSocialMediaShare = (hostname: string) => {
+  const res : ISocialMediaShare[] = [
+    {
+      icon: TwitterIcon,
+      color: '#000',
+      iconColor: '#fff',
+      link: buildUrl('https://twitter.com/intent/tweet', textShare, "text", "url", hostname)
+    },
+    {
+      icon: FarcasterIcon,
+      color: '#8660cd',
+      iconColor: '#fff',
+      link: buildUrl('https://warpcast.com/~/compose', textShare, "text", "embeds[]", hostname)
+    },
+    {
+      icon: LensterIcon,
+      color: '#3d4b41',
+      iconColor: '',
+      link: buildUrl("https://lenster.xyz/", textShare, "text", "url", hostname)
+    },
+    {
+      icon: TelegramIcon,
+      color: '#229ed9',
+      iconColor: '#fff',
+      link: buildUrl('https://t.me/share/url', textShare, "text", "url", hostname)
+    }
+  ]
+  return res;
+}  
