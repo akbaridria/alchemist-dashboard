@@ -11,14 +11,15 @@ import { listGrids } from '@/lib/utils';
 import { GridValue } from '@/types';
 import { LazyImage } from '../LazyImage';
 import { Skeleton } from '../skeleton';
+import Link from 'next/link';
 
-export const ListNft = ({ listNft, loading} : { listNft: NftTokenContract[], loading: boolean}) => {
+export const ListNft = ({ listNft, loading }: { listNft: NftTokenContract[], loading: boolean }) => {
   const [selectedGrid, setSelectedGrid] = useState<GridValue>("grid-4");
 
   return (
     <>
       <div className="flex items-center justify-end sticky top-[62px] z-[10] bg-background">
-        <div className="inline-flex items-center justify-center rounded-lg bg-primary-black border border-input p-1 text-muted-foreground grid grid-cols-4 mb-4">
+        <div className="inline-flex items-center justify-center rounded-lg border border-input p-1 text-muted-foreground grid grid-cols-3 mb-4">
           {
             listGrids.map((item) => {
               return (
@@ -49,90 +50,50 @@ export const ListNft = ({ listNft, loading} : { listNft: NftTokenContract[], loa
                     </CardFooter>
                   </Card>
                 )
-              } )
+              })
             }
           </div> :
           <>
             <div className={`${selectedGrid === 'grid-4' ? 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ' : 'grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6'}`}>
-              {selectedGrid !== 'list' &&
+              {
                 listNft.map((item) => {
                   return (
-                    <Card key={item.nft_data.token_id}>
-                      <div className={`overflow-hidden rounded-t-lg ${selectedGrid === 'no-dec' ? 'rounded-b-lg' : ''}`}>
-                        <LazyImage
-                          src={item.nft_data.external_data.image}
-                          alt={item.nft_data.external_data.name}
-                          classname={`object-contain aspect-square rounded-t-lg ${selectedGrid === 'no-dec' ? 'rounded-b-lg' : ''} transform hover:scale-110 transition duration-200`}
-                        />
-                      </div>
-                      {
-                        selectedGrid !== 'no-dec' &&
-                        <CardFooter className='px-2 py-4 flex-col items-start gap-1'>
-                          <div className='w-full flex justify-end gap-2'>
-                            <div className='flex items-center gap-1'>
-                              <EyeOpenIcon className='w-4 h-4' />
-                              <div className='text-xs'>100</div>
+                    <Link key={item.nft_data.token_id} href={`/${Number(item.nft_data.token_id)}`}>
+                      <Card>
+                        <div className={`overflow-hidden rounded-t-lg ${selectedGrid === 'no-dec' ? 'rounded-b-lg' : ''}`}>
+                          <LazyImage
+                            src={item.nft_data.external_data.image}
+                            alt={item.nft_data.external_data.name}
+                            classname={`object-contain aspect-square rounded-t-lg ${selectedGrid === 'no-dec' ? 'rounded-b-lg' : ''} transform hover:scale-110 transition duration-200`}
+                          />
+                        </div>
+                        {
+                          selectedGrid !== 'no-dec' &&
+                          <CardFooter className='px-2 py-4 flex-col items-start gap-1'>
+                            <div className='w-full flex justify-end gap-2'>
+                              <div className='flex items-center gap-1'>
+                                <EyeOpenIcon className='w-4 h-4' />
+                                <div className='text-xs'>100</div>
+                              </div>
+                              <div className='flex items-center gap-1'>
+                                <HeartIcon className='w-4 h-4' />
+                                <div className='text-xs'>100</div>
+                              </div>
                             </div>
-                            <div className='flex items-center gap-1'>
-                              <HeartIcon className='w-4 h-4' />
-                              <div className='text-xs'>100</div>
+                            <div className='mt-2'>
+                              <p className='text-sm font-semibold'>{item.contract_name} <span className='text-primary-covalent'>#{Number(item.nft_data.token_id)}</span></p>
+                              <p className='text-xs line-clamp-1'>{item.nft_data.external_data.name}</p>
                             </div>
-                          </div>
-                          <div className='mt-2'>
-                            <p className='text-sm font-semibold'>{item.contract_name} <span className='text-primary-covalent'>#{Number(item.nft_data.token_id)}</span></p>
-                            <p className='text-xs line-clamp-1'>{item.nft_data.external_data.name}</p>
-                          </div>
-                        </CardFooter>
-                      }
-                    </Card>
+                          </CardFooter>
+                        }
+                      </Card>
+                    </Link>
                   )
-                })}
+                })
+              }
             </div>
-            {
-              selectedGrid === 'list' && <TableListNft data={listNft} />
-            }
           </>
       }
     </>
-  )
-}
-
-const TableListNft = ({ data }: { data: NftTokenContract[] }) => {
-  const listColumns = ['NFT Item', 'Name', 'Description', 'Owner']
-  return (
-    <div className='overflow-auto'>
-      <div className='grid grid-cols-[minmax(200px,1fr)_minmax(200px,1fr)_minmax(100px,1fr)]  xl:grid-cols-[minmax(200px,1fr)_minmax(200px,1fr)_minmax(500px,1fr)_minmax(100px,1fr)] gap-4 items-center px-2 py-4 text-muted-foreground text-sm'>
-        <div>NFT Item</div>
-        <div>Name</div>
-        <div className='hidden xl:block'>Description</div>
-        <div>Original Owner</div>
-      </div>
-      {
-        data.map((item) => {
-          return (
-            <div key={item.nft_data.token_id} className='grid grid-cols-[minmax(200px,1fr)_minmax(200px,1fr)_minmax(100px,1fr)] xl:grid-cols-[minmax(200px,1fr)_minmax(200px,1fr)_minmax(500px,1fr)_minmax(100px,1fr)] border-t w-fit px-2 py-4 gap-4 items-center text-sm hover:bg-muted/50 transition-colors'>
-              <div className='flex items-center gap-2 font-semibold whitespace-nowrap'>
-                <div className='w-12 h-12 rounded-lg'>
-                  <img src={item.nft_data.external_data.image} className='rounded-lg object-contain w-full h-full aspect-square rounded-lg' alt="" />
-                </div>
-                {item.contract_name}
-                <div className='text-primary-covalent'>
-                  #{Number(item.nft_data.token_id)}
-                </div>
-              </div>
-              <div className='truncate'>
-                {item.nft_data.external_data.name}
-              </div>
-              <div className='truncate hidden xl:block'>
-                {item.nft_data.external_data.description}
-              </div>
-              <div>
-                {trimWallet(item.nft_data.original_owner)}
-              </div>
-            </div>
-          )
-        })
-      }
-    </div>
   )
 }

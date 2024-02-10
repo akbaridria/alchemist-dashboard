@@ -1,17 +1,17 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { CovalentClient, Chains, NftTokenContract } from "@covalenthq/client-sdk";
+import { CovalentClient, Chains, NftTokenContract, NftMetadataResponse, Chain, NftTransaction, LogEvent } from "@covalenthq/client-sdk";
 import data from '@/lib/data.json';
 import { IGridObject, ISocialMediaShare } from "@/types";
 import { ListBulletIcon, ViewGridIcon, TableIcon, DashboardIcon } from '@radix-ui/react-icons'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TwitterIcon, FarcasterIcon, LensterIcon, TelegramIcon } from '@/components/ui/Icons';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const apiService = new CovalentClient(process.env.NEXT_PUBLIC_COVALENT_KEY as string);
+export const apiService = new CovalentClient(process.env.NEXT_PUBLIC_COVALENT_KEY as string);
 
 export const useNftCollection = (pageNumber: number) => {
   const [loading, setLoading] = useState(false);
@@ -43,14 +43,81 @@ export const useNftCollection = (pageNumber: number) => {
     listNft,
     totalItems
   }
+}
 
+export const useNftCollectionById = (id: string) => {
+  const [loading, setLoading] = useState(true);
+  const [dataNft, setData] = useState<NftTokenContract[]>([]);
+  const [sizeNft, setSizeNft] = useState('0');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true)
+        const res = await apiService.NftService.getNftMetadataForGivenTokenIdForContract(data.chain as Chain, data.contract_address, id, { withUncached: true });
+        if(res.error) {
+          setData([])        
+        } else {
+          res.data.items.reduce((_, item) => item.nft_data.external_data.image = data.ipfs_gateway + item.nft_data.external_data.image.slice(21), '');
+          res.data.items.reduce((_, item) => item.nft_data.external_data.animation_url = data.ipfs_gateway + item.nft_data.external_data.animation_url.slice(7), '');
+          if(res.data.items.length > 0) {
+            const size = await fetch(res.data.items[0].nft_data.external_data.animation_url).then(response => response.headers.get("content-length"));
+            const sizeMb = (Number(size) / 1048576);
+            setSizeNft(new Intl.NumberFormat().format(sizeMb));
+          }
+          setData(res.data.items)
+        }
+        setLoading(false)
+      } catch (error) {
+        console.log(error)
+        setLoading(false)
+        setData([]);
+      }
+    })()
+  }, [id])
+  
+  return {
+    loading,
+    dataNft,
+    sizeNft
+  }
+}
+
+export const useNftTransactionById = (id: string) => {
+  const [listTx, setListTx] = useState<LogEvent[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const res = await apiService.NftService.getNftTransactionsForContractTokenId(data.chain as Chain, data.contract_address, id);
+        if(res.error) {
+          setListTx([])
+        } else {
+          const logEvents: LogEvent[] = []
+          res.data.items[0].nft_transactions.forEach((item) => {
+            logEvents.push(...item.log_events.filter((x) => x.decoded?.name === 'TransferSingle'));
+          })
+          setListTx(logEvents);
+        }
+        setLoading(false)
+      } catch (error) {
+        setListTx([])
+        console.log(error)
+        setLoading(false)
+      }
+    })()
+  }, [id])
+
+  return {
+    listTx,
+    loading,
+    fetch
+  }
 }
 
 export const listGrids: IGridObject[] = [
-  {
-    icon: ListBulletIcon,
-    value: "list"
-  },
   {
     icon: ViewGridIcon,
     value: "grid-4"
@@ -77,7 +144,7 @@ const buildUrl = (url: string, text: string, textKey: string, urlKey: string, ho
 const textShare = "Unveiling the Alchemist 4.0 NFT collection! Discover unique artwork & join the community."
 
 export const listSocialMediaShare = (hostname: string) => {
-  const res : ISocialMediaShare[] = [
+  const res: ISocialMediaShare[] = [
     {
       icon: TwitterIcon,
       color: '#000',

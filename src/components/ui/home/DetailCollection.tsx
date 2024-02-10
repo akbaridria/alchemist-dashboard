@@ -24,16 +24,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => {
   const [readMore, setReadmore] = useState(false);
   const [hostname, setHostname] = useState('');
+  const [isCopy, setIsCopy] = useState(false);
 
   useEffect(() => {
     (() => {
       setHostname(window.location.href);
     })()
   }, [])
+
+  const handleCopy = () => {
+    setIsCopy(true);
+    setTimeout(() => {
+      setIsCopy(false);
+    }, 2000)
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4">
@@ -46,7 +55,7 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
         </div>
         <div className="flex items-center gap-2">
           <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Share1Icon className="h-4 w-4" />
               </Button>
@@ -69,7 +78,9 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
                       {hostname}
                     </div>
                     <div className="flex-none -mr-1">
-                      <Button variant="default" size="sm">Copy</Button>
+                      <CopyToClipboard text={hostname} onCopy={handleCopy}>
+                        <Button variant="default" size="sm">{ isCopy ? 'Copied' : 'Copy'}</Button>
+                      </CopyToClipboard>
                     </div>
                   </div>
                 </DialogDescription>
@@ -131,10 +142,10 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
         <p className="underline underline-offset-4 text-xs font-semibold mt-2 cursor-pointer" onClick={() => setReadmore(!readMore)}>{readMore ? 'less' : 'more'}</p>
       </div>
       <Separator />
-      <div className="text-xs grid grid-cols-1 gap-2">
+      <div className="text-sm grid grid-cols-1 gap-2">
         <div className="flex items-center justify-between">
           <div className="text-muted-foreground">Contract Address</div>
-          {!loading && <a href={data.block_explorer + 'address/' + data.contract_address} target="_blank" rel="noopener noreferrer"><Button variant="link" className="text-xs !px-0 !py-0 !h-fit font-normal">{trimWallet(data.contract_address)}</Button></a>}
+          {!loading && <a href={data.block_explorer + 'address/' + data.contract_address} target="_blank" rel="noopener noreferrer"><Button variant="link" className="text-sm !px-0 !py-0 !h-fit font-normal">{trimWallet(data.contract_address)}</Button></a>}
           {loading && <Skeleton className="w-20 h-3" />}
         </div>
         <div className="flex items-center justify-between">
