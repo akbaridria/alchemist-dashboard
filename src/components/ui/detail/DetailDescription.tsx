@@ -143,7 +143,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <a href="/alchemist-logo.jpeg" target="_blank" rel="noopener noreferrer">
+                <a href={dataNft[0].nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <DownloadIcon className="w-4 h-4" />
@@ -151,7 +151,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                     </div>
                   </DropdownMenuItem>
                 </a>
-                <a href="/alchemist-logo.jpeg" target="_blank" rel="noopener noreferrer">
+                <a href={dataNft[0].nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <ImageIcon className="w-4 h-4" />
@@ -160,7 +160,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                   </DropdownMenuItem>
                 </a>
                 <DropdownMenuSeparator />
-                <a href={data.block_explorer + 'address/' + data.contract_address} target="_blank" rel="noopener noreferrer">
+                <a href={data.block_explorer + 'token/' + data.contract_address + '/instance/' + id} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <img src="/zora.png" alt="zora" className="w-4 h-4" />
@@ -168,7 +168,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                     </div>
                   </DropdownMenuItem>
                 </a>
-                <a href="https://opensea.io/assets/zora/0xfeee3700698f8d75bcc18e009022c7b44d2af44f" target="_blank">
+                <a href={`https://opensea.io/assets/zora/0xfeee3700698f8d75bcc18e009022c7b44d2af44f/${id}`} target="_blank">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <OpenseaIcon className="w-4 h-4" />
@@ -251,10 +251,12 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
             <div>
               <Badge variant="default"><span className="italic">VIDEO</span></Badge> {sizeNft} MB
             </div>
-            <Button variant="default" className="bg-primary-covalent hover:bg-primary-covalent/75 hover:text-white/75 text-white transition-all">
-              Mint Now on Zora
-              <ArrowTopRightIcon className="w-4 h-4" />
-            </Button>
+            <a href={`https://zora.co/collect/zora:0xfeee3700698f8d75bcc18e009022c7b44d2af44f/${id}`} target="_blank" rel="noopener noreferrer" className="w-full">
+              <Button variant="default" className="bg-primary-covalent hover:bg-primary-covalent/75 hover:text-white/75 text-white w-full transition-all">
+                Mint Now on Zora
+                <ArrowTopRightIcon className="w-4 h-4" />
+              </Button>
+            </a>
           </div>
           <TabsActivity image={dataNft[0].nft_data.external_data.image} loading={loadingTx} listTx={listTx} />
         </>

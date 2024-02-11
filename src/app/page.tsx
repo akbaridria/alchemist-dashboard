@@ -6,7 +6,7 @@ import { useNftCollection } from "@/lib/utils";
 
 export default function Home() {
   const { listNft, loading, totalItems } = useNftCollection(0);
-    
+
   return (
     <main>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_350px]">
