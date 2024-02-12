@@ -16,7 +16,7 @@ export async function generateMetadata(
   const id = params.id
 
   let title = 'Alchemist 4.0'
-  let images = '/covalent-logo.png'
+  let images = data.site_url + '/alchemist-logo.jpeg'
   let description = 'Alchemist 4.0'
   const apiService = new CovalentClient(process.env.NEXT_PUBLIC_COVALENT_KEY as string);
   
@@ -33,6 +33,8 @@ export async function generateMetadata(
     console.log(error);
   }
 
+  const previousImages = (await parent).openGraph?.images || []
+
   return {
     title: title,
     icons: {
@@ -42,13 +44,13 @@ export async function generateMetadata(
       type: "website",
       description: description,
       title: title,
-      images: '/alchemist-logo.jpeg'
+      images: [images, ...previousImages]
     },
     twitter: {
       card: "summary_large_image",
       title: title,
       description: description,
-      images: '/alchemist-logo.jpeg'
+      images: [images, ...previousImages]
     }
   }
 }

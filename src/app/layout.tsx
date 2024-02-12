@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@/components/ui/header";
+import data from '@/lib/data.json'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,13 +16,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Alchemist 4.0 NFT Collection',
     description: 'Special-made NFTs for Alchemists that have shown above and beyond contributions to the ecosystem and community.',
-    images: '/alchemist-logo.jpeg'
+    images: data.site_url + '/alchemist-logo.jpeg'
   },
   twitter: {
     title: 'Alchemist 4.0 NFT Collection',
     description: 'Special-made NFTs for Alchemists that have shown above and beyond contributions to the ecosystem and community.',
     card: "summary_large_image",
-    images: '/alchemist-logo.jpeg'
+    images: data.site_url + '/alchemist-logo.jpeg'
   }
 };
 
