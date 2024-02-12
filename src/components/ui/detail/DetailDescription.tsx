@@ -23,7 +23,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
-export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: NftTokenContract[], sizeNft: string, id: string, loading: boolean }) => {
+export const DetailDescription: React.FC<{ dataNft: NftTokenContract[], sizeNft: string, id: string, loading: boolean, totalView: string }> = ({ dataNft, sizeNft, id, loading, totalView }) => {
   const [readMore, setReadmore] = useState(false);
   const [hostname, setHostname] = useState('');
   const [isCopy, setIsCopy] = useState(false);
@@ -48,16 +48,16 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
       {
         (!loading && !loadingTx) &&
         <div className="flex gap-2 lg:hidden items-center justify-end">
-          <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1">
+          <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1 focus-visible:outline-none">
             <EyeOpenIcon /> 3
           </Badge>
-          <Drawer>
-            <DrawerTrigger>
-              <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1">
+          <Drawer shouldScaleBackground={true}>
+            <DrawerTrigger asChild>
+              <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1 focus-visible:outline-none">
                 <LightningBoltIcon /> {listTx.length}
               </Badge>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className="focus-visible:outline-none">
               <DrawerHeader className="py-4 mb-4">
                 <div className="text-left mb-4"><DrawerTitle>Activity</DrawerTitle></div>
                 <div className="grid gried-cols-1 gap-4">
@@ -104,7 +104,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
           <div className="flex items-center gap-2">
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hidden md:flex">
                   <Share1Icon className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
@@ -122,8 +122,8 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                       })}
                     </div>
                     <div className="flex items-center gap-2 max-w-[calc(250px_-_3rem)] md:max-w-[calc(400px_-_3rem)]">
-                      <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex-start">
-                        {'a'.repeat(64)}
+                      <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex justify-start">
+                        {hostname}
                       </div>
                       <div className="flex-none -mr-1">
                         <CopyToClipboard text={hostname} onCopy={handleCopy}>
@@ -135,7 +135,39 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                 </DialogHeader>
               </DialogContent>
             </Dialog>
-
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button variant="ghost" size="icon" className="flex md:hidden">
+                  <Share1Icon className="h-4 w-4" />
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent className="focus-visible:outline-none">
+                <DrawerHeader className="py-4 mb-4">
+                  <div className="text-left mb-4"><DrawerTitle>Share</DrawerTitle></div>
+                  <div className="grid gried-cols-1 gap-4">
+                    <div className="flex items-center justify-start md:justify-start gap-2 py-1">
+                      {listSocialMediaShare(hostname).map((item) => {
+                        return (
+                          <a href={item.link.toString()} target="_blank" rel="noopener noreferrer" key={item.color} className={`flex items-center justify-center w-12 h-12 rounded-full`} style={{ backgroundColor: item.color }}>
+                            <item.icon className={`w-6 h-6 stroke-white fill-white`} />
+                          </a>
+                        )
+                      })}
+                    </div>
+                    <div className="flex items-center gap-2 max-w-[calc(100vw_-_3rem)] md:max-w-[calc(400px_-_3rem)]">
+                      <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex justify-start">
+                        {hostname}
+                      </div>
+                      <div className="flex-none -mr-1">
+                        <CopyToClipboard text={hostname} onCopy={handleCopy}>
+                          <Button variant="default" size="sm">{isCopy ? 'Copied' : 'Copy'}</Button>
+                        </CopyToClipboard>
+                      </div>
+                    </div>
+                  </div>
+                </DrawerHeader>
+              </DrawerContent>
+            </Drawer>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="focus-visible:ring-0">
@@ -239,7 +271,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
           }
         </div>
         <div className="flex items-center justify-between">
-          {!loadingTx && <><div className="text-muted-foreground">Total Minters</div><div>{listTx.filter((item) => item.decoded.name === 'TransferSingle').length}</div></>}
+          {(!loadingTx && !loading) && <><div className="text-muted-foreground">Total Minters</div><div>{listTx.filter((item) => item.decoded.name === 'TransferSingle' && item.decoded.params[1].value === data.genesis_address).length}</div></>}
           {loadingTx && <><Skeleton className="w-20 h-4" /><Skeleton className="w-20 h-4" /></>}
         </div>
       </div>
@@ -258,7 +290,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
               </Button>
             </a>
           </div>
-          <TabsActivity image={dataNft[0].nft_data.external_data.image} loading={loadingTx} listTx={listTx} />
+          <TabsActivity image={dataNft[0].nft_data.external_data.image} loading={loadingTx} listTx={listTx} totalView={totalView} />
         </>
       }
       {
@@ -282,7 +314,7 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
   )
 }
 
-const TabsActivity = ({ loading, listTx, image }: { loading: boolean, listTx: LogEvent[], image: string }) => {
+const TabsActivity: React.FC<{ loading: boolean, listTx: LogEvent[], image: string, totalView: string }> = ({ loading, listTx, image, totalView }) => {
   const [activeTab, setActiveTab] = useState(0);
 
 
@@ -321,7 +353,7 @@ const TabsActivity = ({ loading, listTx, image }: { loading: boolean, listTx: Lo
         {
           activeTab === 0 &&
           <div>
-            This page has been view viewed 100 times
+            This page has been viewed {totalView} times
           </div>
         }
       </div>
@@ -334,7 +366,7 @@ const TxDetail = ({ item, image }: { item: LogEvent, image: string }) => {
 
   useEffect(() => {
     (() => {
-      setIsMinted(item.decoded.params[1].value === '0x0000000000000000000000000000000000000000')
+      setIsMinted(item.decoded.params[1].value === data.genesis_address)
     })()
   }, [item.decoded.params])
 

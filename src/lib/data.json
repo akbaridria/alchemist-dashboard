@@ -6,5 +6,7 @@
   "socialMedia": {
     "x": "https://twitter.com/Alchemist_HQ",
     "discord": "https://discord.gg/f6T2qhUf73"
-  }
+  },
+  "genesis_address":"0x0000000000000000000000000000000000000000",
+  "site_url": "https://alchemist-dashboard.vercel.app"
 }

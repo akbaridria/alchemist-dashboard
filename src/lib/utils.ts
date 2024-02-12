@@ -17,18 +17,21 @@ export const useNftCollection = (pageNumber: number) => {
   const [loading, setLoading] = useState(false);
   const [listNft, setListNft] = useState<NftTokenContract[]>([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [hasMore, setHasmore] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true)
-        const d = await apiService.NftService.getTokenIdsForContractWithMetadataByPage(data.chain as Chains, data.contract_address, { withUncached: true, pageNumber: pageNumber, pageSize: 25 });
+        const d = await apiService.NftService.getTokenIdsForContractWithMetadataByPage(data.chain as Chains, data.contract_address, { withUncached: true, pageNumber: pageNumber, pageSize: 12 });
         if (d.error) {
           setListNft([]);
         }
         d.data.items.reduce((_, item) => item.nft_data.external_data.image = data.ipfs_gateway + item.nft_data.external_data.image.slice(21), '');
         setTotalItems(d.data.pagination.total_count);
         setListNft(d.data.items);
+        console.log(d.data.pagination.has_more)
+        setHasmore(d.data.pagination.has_more);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -42,6 +45,7 @@ export const useNftCollection = (pageNumber: number) => {
     loading,
     listNft,
     totalItems,
+    hasMore
   }
 }
 
@@ -71,7 +75,8 @@ export const useNftCollectionById = (id: string) => {
               setSizeNft('0');
             }
             await fetch(`/api/${id}`, { method: 'POST' })
-            .then(async (d) => setTotalView(new Intl.NumberFormat().format((await d.json()).views)))
+            .then((resp) => resp.json())
+            .then((data) => setTotalView(new Intl.NumberFormat().format(data.res.views)))
             .catch(() => setTotalView('0'))
           }
           setData(res.data.items)
@@ -88,7 +93,8 @@ export const useNftCollectionById = (id: string) => {
   return {
     loading,
     dataNft,
-    sizeNft
+    sizeNft,
+    totalView
   }
 }
 

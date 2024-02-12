@@ -17,9 +17,9 @@ export async function generateMetadata(
 
   let title = 'Alchemist 4.0'
   let images = '/covalent-logo.png'
-
+  let description = 'Alchemist 4.0'
   const apiService = new CovalentClient(process.env.NEXT_PUBLIC_COVALENT_KEY as string);
-
+  
   try {
     const res = await apiService.NftService.getNftMetadataForGivenTokenIdForContract(data.chain as Chain, data.contract_address, id, { withUncached: true });
     if (!res.error) {
@@ -27,6 +27,7 @@ export async function generateMetadata(
       res.data.items.reduce((_, item) => item.nft_data.external_data.animation_url = data.ipfs_gateway + item.nft_data.external_data.animation_url.slice(7), '');
       title = res.data.items[0].nft_data.external_data.name;
       images = res.data.items[0].nft_data.external_data.image;
+      description = res.data.items[0].nft_data.external_data.description
     }
   } catch (error) {
     console.log(error);
@@ -36,6 +37,18 @@ export async function generateMetadata(
     title: title,
     icons: {
       icon: images
+    },
+    openGraph: {
+      type: "website",
+      description: description,
+      title: title,
+      images: '/alchemist-logo.jpeg'
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: '/alchemist-logo.jpeg'
     }
   }
 }

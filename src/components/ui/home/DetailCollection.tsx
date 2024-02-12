@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -24,7 +23,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 
 export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => {
   const [readMore, setReadmore] = useState(false);
@@ -56,7 +62,7 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
         <div className="flex items-center gap-2">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hidden md:flex">
                 <Share1Icon className="h-4 w-4" />
               </Button>
             </DialogTrigger>
@@ -73,13 +79,13 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
                       )
                     })}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex-start">
+                  <div className="flex items-center gap-2 max-w-[calc(250px_-_3rem)] md:max-w-[calc(400px_-_3rem)]">
+                    <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex justify-start">
                       {hostname}
                     </div>
                     <div className="flex-none -mr-1">
                       <CopyToClipboard text={hostname} onCopy={handleCopy}>
-                        <Button variant="default" size="sm">{ isCopy ? 'Copied' : 'Copy'}</Button>
+                        <Button variant="default" size="sm">{isCopy ? 'Copied' : 'Copy'}</Button>
                       </CopyToClipboard>
                     </div>
                   </div>
@@ -87,6 +93,40 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
               </DialogHeader>
             </DialogContent>
           </Dialog>
+
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="ghost" size="icon" className="flex md:hidden">
+                <Share1Icon className="h-4 w-4" />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="focus-visible:outline-none">
+              <DrawerHeader className="py-4 mb-4">
+                <div className="text-left mb-4"><DrawerTitle>Share</DrawerTitle></div>
+                <div className="grid gried-cols-1 gap-4">
+                  <div className="flex items-center justify-start md:justify-start gap-2 py-1">
+                    {listSocialMediaShare(hostname).map((item) => {
+                      return (
+                        <a href={item.link.toString()} target="_blank" rel="noopener noreferrer" key={item.color} className={`flex items-center justify-center w-12 h-12 rounded-full`} style={{ backgroundColor: item.color }}>
+                          <item.icon className={`w-6 h-6 stroke-white fill-white`} />
+                        </a>
+                      )
+                    })}
+                  </div>
+                  <div className="flex items-center gap-2 max-w-[calc(100vw_-_3rem)] md:max-w-[calc(400px_-_3rem)]">
+                    <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex justify-start">
+                      {hostname}
+                    </div>
+                    <div className="flex-none -mr-1">
+                      <CopyToClipboard text={hostname} onCopy={handleCopy}>
+                        <Button variant="default" size="sm">{isCopy ? 'Copied' : 'Copy'}</Button>
+                      </CopyToClipboard>
+                    </div>
+                  </div>
+                </div>
+              </DrawerHeader>
+            </DrawerContent>
+          </Drawer>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -160,6 +200,84 @@ export const DetailCollection = ({ loading, totalItems }: IDetailCollection) => 
         </div>
       </div>
       <Separator />
+      {
+        !loading &&
+        <div className="my-4">
+          <Dialog >
+            <DialogTrigger className="w-full hidden md:flex" asChild>
+              <Button variant="default" className="w-full bg-primary-covalent text-white hover:opacity-[0.75] hover:bg-primary-covalent transition-all" size="icon">
+                Mint Info
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle></DialogTitle>
+                <DialogDescription className="text-sm text-left">
+                  <MintInfoDesc />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="default" className="flex md:hidden w-full bg-primary-covalent text-white hover:opacity-[0.75] hover:bg-primary-covalent transition-all" size="icon">
+                Mint Info
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="focus-visible:outline-none">
+              <DrawerHeader className="py-4 mb-4 text-sm text-left">
+                <MintInfoDesc />
+              </DrawerHeader>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      }
     </div>
+  )
+}
+
+const MintInfoDesc = () => {
+  const benefits = [
+    'Growth and development (grow personally and professionally)',
+    'Exclusive access to product releases before the general public',
+    'Embark on thrilling bounties and challenges',
+    'Open up a career path in Web 3.0',
+    'Learn about entrepreneurship',
+    'Unlock your inner data nerd',
+    'Build your project',
+    'Alpha Leaks'
+  ]
+  return (
+    <>
+      <p>
+        <strong>Do you want this cool ass Alchemist 4.0 NFT ?</strong>
+      </p>
+      <br />
+      <p>
+        Be an alchemist to mint one and get others benefit like:
+        <ul>
+          {
+            benefits.map((item) => {
+              return (
+                <li key={item}>
+                  <div className="grid gap-1 grid-cols-[1rem_1fr]">
+                    <div>🧪</div>
+                    <div>{item}</div>
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </p>
+      <br />
+      <p>
+        <strong>Become an Alchemist now!</strong>
+      </p>
+      <p>
+        Next registration opens on Covalent Discord. Join <a href={data.socialMedia.discord} target="_blank" rel="noopener noreferrer" className="underline-offset-4 underline text-primary-covalent">here</a>
+      </p>
+    </>
   )
 }

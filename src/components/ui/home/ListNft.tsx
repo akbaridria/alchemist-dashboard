@@ -5,20 +5,21 @@ import {
   Card,
   CardFooter,
 } from "@/components/ui/card"
-import { EyeOpenIcon } from '@radix-ui/react-icons'
+import { ArrowLeftIcon, ArrowRightIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 import { listGrids } from '@/lib/utils';
 import { GridValue, Views } from '@/types';
 import { LazyImage } from '../LazyImage';
 import { Skeleton } from '../skeleton';
 import Link from 'next/link';
 import { Badge } from '../badge';
+import { Button } from '../button';
 
-export const ListNft = ({ listNft, loading }: { listNft: NftTokenContract[], loading: boolean }) => {
+export const ListNft: React.FC<{ listNft: NftTokenContract[], loading: boolean, page: number, setPage: (n: number) => void, hasMore: boolean }> = ({ listNft, loading, page, setPage, hasMore }) => {
   const [selectedGrid, setSelectedGrid] = useState<GridValue>("grid-4");
 
   return (
     <>
-      <div className="flex items-center justify-end sticky top-[62px] z-[10] bg-background">
+      <div className="items-center justify-end sticky top-[62px] z-[10] bg-background hidden md:flex">
         <div className="inline-flex items-center justify-center rounded-lg border border-input p-1 text-muted-foreground grid grid-cols-3 mb-4">
           {
             listGrids.map((item) => {
@@ -40,7 +41,7 @@ export const ListNft = ({ listNft, loading }: { listNft: NftTokenContract[], loa
         loading ?
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {
-              Array(16).fill(0).map((_, index) => {
+              Array(12).fill(0).map((_, index) => {
                 return (
                   <Card key={index}>
                     <Skeleton className='w-full aspect-square rounded-t-lg' />
@@ -65,6 +66,16 @@ export const ListNft = ({ listNft, loading }: { listNft: NftTokenContract[], loa
             </div>
           </>
       }
+      <div className='py-4 md:py-8 flex items-center justify-end'>
+        <div className='flex items-center gap-4'>
+          <Button size="icon" variant="ghost" disabled={loading || page === 0} onClick={() => setPage( page - 1)}>
+            <ArrowLeftIcon className='w-4 h-4' />
+          </Button>
+          <Button size="icon" variant="ghost" disabled={loading || !hasMore} onClick={() => setPage(page + 1)}>
+            <ArrowRightIcon className='w-4 h-4' />
+          </Button>
+        </div>
+      </div>
     </>
   )
 }
