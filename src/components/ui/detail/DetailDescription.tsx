@@ -175,7 +175,7 @@ export const DetailDescription: React.FC<{ dataNft: NftTokenContract[], sizeNft:
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <a href={dataNft[0].nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
+                <a href={dataNft[0]?.nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <DownloadIcon className="w-4 h-4" />
@@ -183,7 +183,7 @@ export const DetailDescription: React.FC<{ dataNft: NftTokenContract[], sizeNft:
                     </div>
                   </DropdownMenuItem>
                 </a>
-                <a href={dataNft[0].nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
+                <a href={dataNft[0]?.nft_data.external_data.animation_url} target="_blank" rel="noopener noreferrer">
                   <DropdownMenuItem>
                     <div className="flex items-center gap-2 text-sm">
                       <ImageIcon className="w-4 h-4" />

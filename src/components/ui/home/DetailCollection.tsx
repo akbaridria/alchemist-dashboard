@@ -251,7 +251,7 @@ const MintInfoDesc = () => {
   return (
     <>
       <p>
-        <strong>Do you want this cool ass Alchemist 4.0 NFT ?</strong>
+        <strong>Do you want this wicked-cool Alchemist 4.0 NFT ?</strong>
       </p>
       <br />
       <p>

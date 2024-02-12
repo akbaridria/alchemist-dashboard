@@ -1,5 +1,6 @@
 'use client';
 
+import { Error } from "@/components/ui/error";
 import { DetailCollection } from "@/components/ui/home/DetailCollection";
 import { ListNft } from "@/components/ui/home/ListNft";
 import { useNftCollection } from "@/lib/utils";
@@ -8,7 +9,9 @@ import { Suspense, useState } from "react";
 export default function Home() {
   const [page, setPage] = useState(0)
   const { listNft, loading, totalItems, hasMore } = useNftCollection(page);
-
+  if(!loading && listNft.length === 0) {
+    return <Error link="/" backToHome={false} />
+  }
   return (
     <main>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_350px]">
