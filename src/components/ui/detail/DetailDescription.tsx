@@ -108,22 +108,22 @@ export const DetailDescription = ({ dataNft, sizeNft, id, loading }: { dataNft: 
                   <Share1Icon className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
-              <DialogContent className="w-[80%] max-w-[300px] md:max-w-[400px]">
+              <DialogContent className="max-w-[250px] md:max-w-[400px]">
                 <DialogHeader>
                   <DialogTitle>Share</DialogTitle>
                   <DialogDescription>
                     <div className="flex items-center justify-center md:justify-start gap-2 py-4">
                       {listSocialMediaShare(hostname).map((item) => {
                         return (
-                          <a href={item.link.toString()} target="_blank" rel="noopener noreferrer" key={item.color} className={`flex items-center justify-center w-12 h-12 rounded-full`} style={{ backgroundColor: item.color }}>
-                            <item.icon className={`w-6 h-6 stroke-white fill-white`} />
+                          <a href={item.link.toString()} target="_blank" rel="noopener noreferrer" key={item.color} className={`flex items-center justify-center w-8 h-8 md:w-12 md:h-12 rounded-full`} style={{ backgroundColor: item.color }}>
+                            <item.icon className={` h-4 w-4 md:w-6 md:h-6 stroke-white fill-white`} />
                           </a>
                         )
                       })}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 max-w-[calc(250px_-_3rem)] md:max-w-[calc(400px_-_3rem)]">
                       <div className="flex-1 border-input border rounded-md px-2 py-2 truncate flex-start">
-                        {hostname}
+                        {'a'.repeat(64)}
                       </div>
                       <div className="flex-none -mr-1">
                         <CopyToClipboard text={hostname} onCopy={handleCopy}>

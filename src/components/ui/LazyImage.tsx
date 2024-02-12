@@ -11,9 +11,7 @@ export const LazyImage = ({ src, alt, classname }: IPropsImage) => {
       // checking if image is in browser cached
       const img = new Image();
       img.src = src;
-      const complete = img.complete
-      img.src = ""
-      setLoading(!complete);
+      setLoading(!img.complete);
     })()
   }, [src])
 
