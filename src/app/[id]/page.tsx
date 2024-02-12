@@ -16,7 +16,7 @@ export async function generateMetadata(
   const id = params.id
 
   let title = 'Alchemist 4.0'
-  let images = data.site_url + '/alchemist-logo.jpeg'
+  let images = 'https://www.datocms-assets.com/86369/1697820116-alchemists_background.jpg?dpr=0.5&fm=webp'
   let description = 'Alchemist 4.0'
   const apiService = new CovalentClient(process.env.NEXT_PUBLIC_COVALENT_KEY as string);
   

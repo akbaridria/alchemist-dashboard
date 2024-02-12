@@ -16,13 +16,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Alchemist 4.0 NFT Collection',
     description: 'Special-made NFTs for Alchemists that have shown above and beyond contributions to the ecosystem and community.',
-    images: data.site_url + '/alchemist-logo.jpeg'
+    images: 'https://www.datocms-assets.com/86369/1697820116-alchemists_background.jpg?dpr=0.5&fm=webp'
   },
   twitter: {
     title: 'Alchemist 4.0 NFT Collection',
     description: 'Special-made NFTs for Alchemists that have shown above and beyond contributions to the ecosystem and community.',
     card: "summary_large_image",
-    images: data.site_url + '/alchemist-logo.jpeg'
+    images: 'https://www.datocms-assets.com/86369/1697820116-alchemists_background.jpg?dpr=0.5&fm=webp'
   }
 };
 
