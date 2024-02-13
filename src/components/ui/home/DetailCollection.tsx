@@ -255,8 +255,8 @@ const MintInfoDesc = () => {
       </p>
       <br />
       <p>
-        Be an alchemist to mint one and get others benefit like:
-        <ul>
+        Be an alchemist and rank up to mint one and get others benefit like:
+        <ul className="leading-6">
           {
             benefits.map((item) => {
               return (

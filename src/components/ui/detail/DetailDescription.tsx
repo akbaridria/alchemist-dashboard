@@ -49,7 +49,7 @@ export const DetailDescription: React.FC<{ dataNft: NftTokenContract[], sizeNft:
         (!loading && !loadingTx) &&
         <div className="flex gap-2 lg:hidden items-center justify-end">
           <Badge variant="secondary" className="flex items-center gap-1 px-2 py-1 focus-visible:outline-none">
-            <EyeOpenIcon /> 3
+            <EyeOpenIcon /> { totalView }
           </Badge>
           <Drawer shouldScaleBackground={true}>
             <DrawerTrigger asChild>
