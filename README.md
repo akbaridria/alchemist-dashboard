@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+<img src="https://github.com/akbaridria/alchemist-dashboard/assets/26589426/6b1aae4c-3ef4-481b-8ed4-08671f7a1409" />
+</p>
 
-## Getting Started
+<h1 align="center" tabindex="-1" dir="auto">
+  The Frontend of <br /> Alchemist 4.0 NFT Collection
+</h1>
 
-First, run the development server:
+<p align="center">Trt it <a href="https://alchemist-dashboard.vercel.app/">here</a></p>
+<p align="center">To know more about what is alchemist 4.0 nft collection <br /> you can read the notion page <a href="https://covalenthq.notion.site/covalenthq/The-Alchemist-Program-4-0-0a0ce7a2b09749c0b49d23de8434682f">here</a>
+  that will include all detail about alchemist 4.0 program</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## TechStack
+- Node > 18.0.0
+- Next JS > 14 (App Router)
+- Covalent API
+- Shadcdn
+
+## Installation
+
+1. **Clone this repository**  
 ```
+git clone https://github.com/akbaridria/alchemist-dashboard.git
+```
+2. **Navigate to the project directory**  
+```
+cd alchemist-dashboard
+```
+3. **Install depedencly**  
+```
+pnpm install
+```
+4. **Add .env file in the root of the project directory**  
+```
+NEXT_PUBLIC_COVALENT_KEY="your covalent api key"
+```
+since you are placing your key in the client, make sure that you had allow-list enable for security reason
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5. **Start Development Server**  
+```
+pnpm run dev // the default could be in http://localhost:3000
+```
